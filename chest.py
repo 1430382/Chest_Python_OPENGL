@@ -6,6 +6,7 @@ from OpenGL.GLU import *
 from random import randint, uniform,random
 import math
 import sys
+from Texture import *
 ##########variables iniciales
 GL_PI = 3.1415
 PI =3.14159265
@@ -74,11 +75,8 @@ def Torus(X,Y,Z,W,Q):
     glTranslatef(X,Y,Z)
     glScalef(W,1.0,1.0)
     glutSolidTorus(innerRaidus,outterRaidus,sides,rings)
-
-
 #####333
 def reshapeTorus(x,y):
-
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     gluPerspective(100.0,1,0.5,20.0)
@@ -100,7 +98,6 @@ def DibujaCilindro (X, Y, LADOS):
     Puntos2 = []
     for i in range(0, TAM_ARR, 1):
         Puntos2.append([])
-
     z = 5.0
     radio = 1.5
     Contador = 0
@@ -117,7 +114,6 @@ def DibujaCilindro (X, Y, LADOS):
         Contador = Contador + 1# se le suma al contador 1 por cada exitosa
         angle = angle + (2.0*GL_PI)/LADOS
     glEnd()
-
     #printf ("\n Puntos Segundo Poligono ");
     z = -5.0
     radio = 1.5
@@ -134,7 +130,6 @@ def DibujaCilindro (X, Y, LADOS):
         angle = angle + (2.0*GL_PI)/LADOS
     glEnd()
     glFlush()
-
     for i in range( 0, LADOS, 1):
         glBegin(GL_POLYGON)
         glColor3f(1.0,1.0,1.0/(i+1))
@@ -167,9 +162,9 @@ def DibujaObjetos():
 		glRotatef(90,0,100,0)
 		glColor3f(0.55, 0.47, 0.14)
 		glScalef(1.2,-1.5,0)
-		DibujaCilindro(0,2,20)		
+		DibujaCilindro(0,2,20)
 		glPopMatrix()
-		#lado izquierdo			
+		#lado izquierdo
 		glPushMatrix()
 		glTranslatef(-4.1,5,0)
 		glRotatef(90,0,100,0)
@@ -408,14 +403,21 @@ def showMenu():
 
 #****************************************************************************************
 def init (): # Initializes the gl Graphics env and the program variables.
-		global x_Angle
-		global y_Angle
-		global z_Angle
-		x_Angle = 0.0
-		y_Angle = 0.0
-		z_Angle = 0.0
+		#global x_Angle
+		#global y_Angle
+		#global z_Angle
+		#x_Angle = 0.0
+		#y_Angle = 0.0
+		#z_Angle = 0.0
 
 		glEnable(GL_DEPTH_TEST)	# Enable z-Buffering.
+		#global tex
+		#tex = Texture("images/bricks.bmp")
+		#glBindTexture(GL_TEXTURE_2D, tex.texID)
+		#glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+		#glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+		#gluBuild2DMipmaps(GL_TEXTURE_2D, 3, tex.width, tex.height, \
+		#				  GL_RGB, GL_UNSIGNED_BYTE, tex.data)
 		showMenu()
 
 #****************************************************************************************
@@ -425,27 +427,27 @@ def keyboardCallbackProc(key, x, y): # This is the callback procedure for captur
 		global z_Angle
 		global p
 		global q
-		if key == 'x':
+		if key.decode("utf-8") == 'x':
 				x_Angle = x_Angle + 1
-		elif key == 'X':
+		elif key.decode("utf-8") == 'X':
 				x_Angle = x_Angle - 1
-		elif key == 'y':
+		elif key.decode("utf-8") == 'y':
 				y_Angle = y_Angle + 1
-		elif key == 'Y':
+		elif key.decode("utf-8") == 'Y':
 				y_Angle = y_Angle - 1
-		elif key == 'z':
+		elif key.decode("utf-8") == 'z':
 				z_Angle = z_Angle + 1
-		elif key == 'Z':
+		elif key.decode("utf-8") == 'Z':
 				z_Angle = z_Angle - 1
-		elif key == 'M' :
+		elif key.decode("utf-8") == 'M' :
 				showMenu()
-		elif key == 'm' :
+		elif key.decode("utf-8") == 'm' :
 				showMenu()
 		elif key == b'\033' :				#ESCAPE Code for exiting program.
 				sys.exit()
-		elif key == 'P' :
-				p = p + 1				
-		elif key == 'Q' :
+		elif key.decode("utf-8") == 'P' :
+				p = p + 1
+		elif key.decode("utf-8") == 'Q' :
 				q = q + 1
 		glutPostRedisplay()
 
@@ -463,14 +465,12 @@ def reShapeCallbackProc(w, h): # This is the callback procedure for capturing re
 def displayCallbackProc(): # This is the callback procedure for capturing OpenGL Display events.
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 	glMatrixMode(GL_MODELVIEW)
-
 	glLoadIdentity()
 	glTranslatef(-0, -0, -20)	# Translate the object by 10 units in -ve z-direction.
 	glRotatef(x_Angle, 1.0, 0.0,0.0)	# Translate the object by 10 units in -ve z-direction.
 	glRotatef(y_Angle, 0.0, 1.0,0.0)	# Translate the object by 10 units in -ve z-direction.
 	glRotatef(z_Angle, 0.0, 0.0,1.0)	# Translate the object by 10 units in -ve z-direction.
 	DibujaObjetos()		# Draw
-
 	glutSwapBuffers()
 
 #****************************************************************************************
@@ -479,16 +479,13 @@ def main (): # The main program.
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
 	glutInitWindowSize(SIZE, SIZE)
 	glutInitWindowPosition(350, 200)
-
 	glutCreateWindow("Chest")
 	init()				# Initialize the env. variables and the program global variables.
-
 	glutDisplayFunc(displayCallbackProc)
 	glutKeyboardFunc(keyboardCallbackProc)
 	glutReshapeFunc(reShapeCallbackProc)
     #glutReshapeFunc(reshapeTorus)
     #glutIdleFunc(idleTorus)
 	glutMainLoop()
-
 main ()
 #*************************** END OF PROGRAM ************************************************
